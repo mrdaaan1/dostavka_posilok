@@ -52,7 +52,7 @@ begin
 end;
 $$;
 
-create trigger on_auth_user_created
+create trigger delivery_on_auth_user_created
   after insert on auth.users
   for each row execute function delivery.handle_new_user();
 
