@@ -7,6 +7,7 @@ import { Package, MapPinned } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Button from "@/components/ui/Button";
 import Reveal from "@/components/ui/Reveal";
+import CityCombobox from "@/components/ui/CityCombobox";
 
 export default function Hero() {
   const router = useRouter();
@@ -92,21 +93,9 @@ export default function Hero() {
               onSubmit={handleSearch}
               className="mx-auto mt-10 flex max-w-xl flex-col gap-2 rounded-2xl border border-ink/10 bg-surface p-2 shadow-sm sm:flex-row sm:items-center"
             >
-              <input
-                type="text"
-                value={from}
-                onChange={(e) => setFrom(e.target.value)}
-                placeholder="Откуда"
-                className="w-full rounded-xl bg-surface-tint px-4 py-3 text-sm text-ink outline-none placeholder:text-ink-faint sm:flex-1"
-              />
+              <CityCombobox value={from} onChange={setFrom} placeholder="Откуда" />
               <span className="hidden text-ink-faint sm:block">→</span>
-              <input
-                type="text"
-                value={to}
-                onChange={(e) => setTo(e.target.value)}
-                placeholder="Куда"
-                className="w-full rounded-xl bg-surface-tint px-4 py-3 text-sm text-ink outline-none placeholder:text-ink-faint sm:flex-1"
-              />
+              <CityCombobox value={to} onChange={setTo} placeholder="Куда" />
               <button
                 type="submit"
                 className="w-full rounded-xl bg-gradient-brand px-5 py-3 text-sm font-semibold text-ink transition hover:brightness-105 sm:w-auto"

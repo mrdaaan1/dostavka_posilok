@@ -1,6 +1,24 @@
-import { Wallet, ShieldAlert } from "lucide-react";
+import { Wallet, Zap, ShieldCheck } from "lucide-react";
 import Container from "@/components/ui/Container";
 import Reveal from "@/components/ui/Reveal";
+
+const points = [
+  {
+    icon: Wallet,
+    title: "Дешевле",
+    text: "Вы просто благодарите человека, который и так едет вашим маршрутом — не платите за целую логистическую цепочку.",
+  },
+  {
+    icon: Zap,
+    title: "Быстрее",
+    text: "Посылка доезжает за то же время, что и сам попутчик — а не после нескольких дней на складе.",
+  },
+  {
+    icon: ShieldCheck,
+    title: "Безопаснее",
+    text: "Подтверждение сделки и прямая связь внутри платформы — вместо поиска через закрытые Telegram-чаты.",
+  },
+];
 
 export default function PainPoint() {
   return (
@@ -11,33 +29,18 @@ export default function PainPoint() {
       />
 
       <Container>
-        <div className="grid gap-16 sm:grid-cols-2">
-          <Reveal>
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-brand">
-              <Wallet className="h-6 w-6 text-ink" strokeWidth={1.75} />
-            </div>
-            <h2 className="mt-5 font-display text-3xl font-bold text-ink sm:text-4xl">
-              Дёшево и быстро
-            </h2>
-            <p className="mt-4 max-w-md text-ink-soft">
-              Попутчик уже едет вашим маршрутом — доставка стоит недорого и
-              занимает столько же времени, сколько его поездка.
-            </p>
-          </Reveal>
-
-          <Reveal delay={0.1}>
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-brand">
-              <ShieldAlert className="h-6 w-6 text-ink" strokeWidth={1.75} />
-            </div>
-            <h2 className="mt-5 font-display text-3xl font-bold text-ink sm:text-4xl">
-              Сейчас люди ищут попутчиков в Telegram-чатах
-            </h2>
-            <p className="mt-4 max-w-md text-ink-soft">
-              Без проверки, без подтверждения сделки, без защиты от
-              мошенников — просто отправить вещь незнакомцу и понадеяться.
-              Мы делаем это безопаснее и понятнее.
-            </p>
-          </Reveal>
+        <div className="grid gap-12 sm:grid-cols-3">
+          {points.map((point, index) => (
+            <Reveal key={point.title} delay={index * 0.1}>
+              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-brand">
+                <point.icon className="h-6 w-6 text-ink" strokeWidth={1.75} />
+              </div>
+              <h2 className="mt-5 font-display text-2xl font-bold text-ink sm:text-3xl">
+                {point.title}
+              </h2>
+              <p className="mt-3 text-ink-soft">{point.text}</p>
+            </Reveal>
+          ))}
         </div>
       </Container>
     </section>

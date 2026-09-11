@@ -1,15 +1,10 @@
 import { Suspense } from "react";
-import type { Metadata } from "next";
 import RegisterOverlay from "@/components/register/RegisterOverlay";
 import RegisterFlow from "@/components/register/RegisterFlow";
 
-export const metadata: Metadata = {
-  title: "Регистрация — Товарище",
-};
-
-export default function RegisterPage() {
+export default function RegisterModal() {
   return (
-    <RegisterOverlay standalone>
+    <RegisterOverlay>
       <Suspense fallback={null}>
         <RegisterFlow />
       </Suspense>
