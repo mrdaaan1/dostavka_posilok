@@ -8,7 +8,7 @@ export const metadata: Metadata = {
 
 export default function RegisterPage() {
   return (
-    <main className="flex flex-1 items-center justify-center px-6 py-20">
+    <main className="flex flex-1 items-center justify-center bg-dark/90 px-6 py-20">
       <Suspense fallback={null}>
         <RegisterFlow />
       </Suspense>

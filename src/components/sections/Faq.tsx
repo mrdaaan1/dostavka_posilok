@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { motion, AnimatePresence } from "motion/react";
 import Container from "@/components/ui/Container";
+import Reveal from "@/components/ui/Reveal";
 
 const faqItems = [
   {
@@ -37,37 +39,55 @@ export default function Faq() {
   return (
     <section id="faq" className="bg-surface-tint py-20 sm:py-28">
       <Container>
-        <h2 className="font-display text-3xl font-bold text-ink sm:text-4xl">
-          Частые вопросы
-        </h2>
+        <Reveal>
+          <h2 className="font-display text-3xl font-bold text-ink sm:text-4xl">
+            Частые вопросы
+          </h2>
+        </Reveal>
 
-        <div className="mt-10 divide-y divide-ink/10 border-y border-ink/10">
-          {faqItems.map((item, index) => {
-            const isOpen = openIndex === index;
-            return (
-              <div key={item.question}>
-                <button
-                  type="button"
-                  onClick={() => setOpenIndex(isOpen ? null : index)}
-                  className="flex w-full items-center justify-between gap-4 py-5 text-left"
-                  aria-expanded={isOpen}
-                >
-                  <span className="font-medium text-ink">{item.question}</span>
-                  <span
-                    className={`shrink-0 text-xl text-ink-faint transition-transform ${
-                      isOpen ? "rotate-45" : ""
-                    }`}
+        <Reveal delay={0.1}>
+          <div className="mt-10 divide-y divide-ink/10 border-y border-ink/10">
+            {faqItems.map((item, index) => {
+              const isOpen = openIndex === index;
+              return (
+                <div key={item.question}>
+                  <button
+                    type="button"
+                    onClick={() => setOpenIndex(isOpen ? null : index)}
+                    className="flex w-full items-center justify-between gap-4 py-5 text-left"
+                    aria-expanded={isOpen}
                   >
-                    +
-                  </span>
-                </button>
-                {isOpen && (
-                  <p className="pb-5 text-sm text-ink-soft">{item.answer}</p>
-                )}
-              </div>
-            );
-          })}
-        </div>
+                    <span className="font-medium text-ink">
+                      {item.question}
+                    </span>
+                    <motion.span
+                      animate={{ rotate: isOpen ? 45 : 0 }}
+                      transition={{ duration: 0.2 }}
+                      className="shrink-0 text-xl text-ink-faint"
+                    >
+                      +
+                    </motion.span>
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.25, ease: "easeInOut" }}
+                        className="overflow-hidden"
+                      >
+                        <p className="pb-5 text-sm text-ink-soft">
+                          {item.answer}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
+          </div>
+        </Reveal>
       </Container>
     </section>
   );

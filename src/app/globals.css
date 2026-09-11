@@ -60,3 +60,8 @@ body {
   background-clip: text;
   color: transparent;
 }
+
+.bg-dot-grid {
+  background-image: radial-gradient(circle, var(--color-ink) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
