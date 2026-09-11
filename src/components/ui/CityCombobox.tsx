@@ -7,10 +7,14 @@ export default function CityCombobox({
   value,
   onChange,
   placeholder,
+  name,
+  required,
 }: {
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
+  name?: string;
+  required?: boolean;
 }) {
   const [query, setQuery] = useState(value);
   const [isOpen, setIsOpen] = useState(false);
@@ -64,6 +68,8 @@ export default function CityCombobox({
     <div ref={containerRef} className="relative w-full sm:flex-1">
       <input
         type="text"
+        name={name}
+        required={required}
         value={query}
         onChange={(e) => {
           setQuery(e.target.value);

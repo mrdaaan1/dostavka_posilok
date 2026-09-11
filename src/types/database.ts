@@ -150,7 +150,12 @@ export interface Database {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      get_counterpart_contact: {
+        Args: { p_match_id: string };
+        Returns: string | null;
+      };
+    };
     Enums: {
       user_role: UserRole;
       request_status: RequestStatus;

@@ -267,14 +267,14 @@ export default function RegisterFlow() {
                 Готово!
               </h1>
               <p className="text-sm text-ink-soft">
-                Регистрация прошла успешно. Личный кабинет появится на
-                следующем этапе — часть функций пока в разработке.
+                Регистрация прошла успешно — можно создавать первую заявку
+                или поездку.
               </p>
               <Link
-                href="/"
-                className="inline-flex items-center justify-center rounded-xl border border-ink/15 px-5 py-3 text-sm font-semibold text-ink transition hover:bg-surface-tint"
+                href="/app"
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-brand px-5 py-3 text-sm font-semibold text-ink transition hover:brightness-105"
               >
-                На главную
+                В личный кабинет
               </Link>
             </motion.div>
           )}
