@@ -1,36 +1,40 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Товарище
 
-## Getting Started
+Платформа попутной доставки посылок между городами — «как BlaBlaCar, но для вещей». MVP-лендинг для проверки гипотезы ценности на живых пользователях (Telegram-чаты по перевозке посылок).
 
-First, run the development server:
+Подробное ТЗ по лендингу, копирайту и флоу регистрации — в [docs/ТЗ_лендинг.md](docs/ТЗ_лендинг.md).
+
+## Стек
+
+- Next.js 16 (App Router) + TypeScript
+- Tailwind CSS v4
+- Шрифты: Unbounded (заголовки), Inter (текст) — оба с поддержкой кириллицы
+
+## Запуск локально
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Открыть [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Структура
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `src/app/page.tsx` — лендинг (все 9 блоков из ТЗ)
+- `src/app/register` — флоу регистрации: email/пароль → выбор одной роли → анкета (необязательная)
+- `src/app/privacy`, `src/app/terms` — черновые Политика конфиденциальности и Условия использования (не проработаны юристом, см. ТЗ)
+- `src/components/sections` — секции лендинга
+- `src/components/register` — визард регистрации
 
-## Learn More
+## Переменные окружения
 
-To learn more about Next.js, take a look at the following resources:
+См. `.env.example`. На данный момент не обязательны — Supabase ещё не подключён (регистрация работает на локальном состоянии, без сохранения). Когда будут готовы ключи Supabase, добавить их в `.env.local` и в переменные окружения проекта на Vercel:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+- `NEXT_PUBLIC_ANALYTICS_ID` (Яндекс.Метрика или аналог, для отслеживания источников трафика по UTM)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Деплой
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Проект подготовлен для деплоя на Vercel (без vercel.json — стандартная автоматическая конфигурация для Next.js). Деплой и подключение переменных окружения — вручную через Vercel Dashboard.

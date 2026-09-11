@@ -1,26 +1,62 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-mint: #7feacf;
+  --color-mint-dark: #4bd3ae;
+  --color-pink: #f7a9d6;
+  --color-pink-dark: #ee82c3;
+  --color-lavender: #b6aeee;
+  --color-lavender-dark: #9a8ce4;
+
+  --color-ink: #1f1d2b;
+  --color-ink-soft: #57546a;
+  --color-ink-faint: #8c899c;
+
+  --color-surface: #ffffff;
+  --color-surface-tint: #f6f4fc;
+  --color-dark: #15131f;
+
+  --gradient-brand: linear-gradient(
+    120deg,
+    var(--color-mint) 0%,
+    var(--color-lavender) 55%,
+    var(--color-pink) 100%
+  );
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-mint: var(--color-mint);
+  --color-mint-dark: var(--color-mint-dark);
+  --color-pink: var(--color-pink);
+  --color-pink-dark: var(--color-pink-dark);
+  --color-lavender: var(--color-lavender);
+  --color-lavender-dark: var(--color-lavender-dark);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-ink: var(--color-ink);
+  --color-ink-soft: var(--color-ink-soft);
+  --color-ink-faint: var(--color-ink-faint);
+
+  --color-surface: var(--color-surface);
+  --color-surface-tint: var(--color-surface-tint);
+  --color-dark: var(--color-dark);
+
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-unbounded);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-surface);
+  color: var(--color-ink);
+  font-family: var(--font-sans), Arial, sans-serif;
+}
+
+.bg-gradient-brand {
+  background-image: var(--gradient-brand);
+}
+
+.text-gradient-brand {
+  background-image: var(--gradient-brand);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }
