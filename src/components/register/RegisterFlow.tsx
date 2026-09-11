@@ -5,6 +5,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "motion/react";
 import { Package, Route, Check } from "lucide-react";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/client";
 
 type Role = "sender" | "carrier";
 type Step = "register" | "profile" | "done";
@@ -42,17 +43,52 @@ export default function RegisterFlow() {
   );
   const [name, setName] = useState("");
   const [about, setAbout] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  function handleRegister(event: React.FormEvent) {
+  async function handleRegister(event: React.FormEvent) {
     event.preventDefault();
     if (!role) return;
-    // TODO: когда появится ключ Supabase — заменить на supabase.auth.signUp
-    // и запись роли в таблицу профилей. Дальше — переход к анкете.
+    setError(null);
+
+    if (!isSupabaseConfigured) {
+      // Supabase ещё не подключён (нет ключей в .env.local) — локальная заглушка.
+      setStep("profile");
+      return;
+    }
+
+    setIsSubmitting(true);
+    const supabase = createClient();
+    const { error: signUpError } = await supabase.auth.signUp({
+      email,
+      password,
+      options: { data: { role } },
+    });
+    setIsSubmitting(false);
+
+    if (signUpError) {
+      setError(signUpError.message);
+      return;
+    }
     setStep("profile");
   }
 
-  function handleSaveProfile(event: React.FormEvent) {
+  async function handleSaveProfile(event: React.FormEvent) {
     event.preventDefault();
+
+    if (isSupabaseConfigured) {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        await supabase
+          .from("profiles")
+          .update({ name: name || null, bio: about || null })
+          .eq("id", user.id);
+      }
+    }
+
     setStep("done");
   }
 
@@ -147,12 +183,16 @@ export default function RegisterFlow() {
                 </div>
               </div>
 
+              {error && (
+                <p className="text-sm text-pink-dark">{error}</p>
+              )}
+
               <button
                 type="submit"
-                disabled={!role}
+                disabled={!role || isSubmitting}
                 className="w-full rounded-xl bg-gradient-brand px-5 py-3 text-sm font-semibold text-ink transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-40"
               >
-                Зарегистрироваться
+                {isSubmitting ? "Регистрируем…" : "Зарегистрироваться"}
               </button>
             </motion.form>
           )}
