@@ -1,6 +1,6 @@
-// Ручная копия типов под supabase/migrations/0001_init_delivery_schema.sql.
-// Заменить на `supabase gen types typescript --schema delivery` после
-// применения миграции к реальному проекту — структура совпадает 1:1.
+// Ручная копия типов под supabase/migrations/*.sql (0001-0003).
+// Заменить на `supabase gen types typescript --schema delivery`,
+// когда появится supabase CLI под рукой — структура совпадает 1:1.
 
 export type UserRole = "sender" | "carrier";
 export type RequestStatus =
@@ -27,6 +27,7 @@ export interface Database {
           name: string | null;
           avatar_url: string | null;
           bio: string | null;
+          contact: string | null;
           created_at: string;
         };
         Insert: {
@@ -35,6 +36,7 @@ export interface Database {
           name?: string | null;
           avatar_url?: string | null;
           bio?: string | null;
+          contact?: string | null;
           created_at?: string;
         };
         Update: Partial<Database["delivery"]["Tables"]["profiles"]["Insert"]>;
@@ -122,24 +124,6 @@ export interface Database {
           updated_at?: string;
         };
         Update: Partial<Database["delivery"]["Tables"]["matches"]["Insert"]>;
-        Relationships: [];
-      };
-      messages: {
-        Row: {
-          id: string;
-          match_id: string;
-          sender_id: string;
-          body: string;
-          created_at: string;
-        };
-        Insert: {
-          id?: string;
-          match_id: string;
-          sender_id: string;
-          body: string;
-          created_at?: string;
-        };
-        Update: Partial<Database["delivery"]["Tables"]["messages"]["Insert"]>;
         Relationships: [];
       };
       ratings: {
