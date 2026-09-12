@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { createClient } from "@/lib/supabase/server";
+import { signOut } from "@/app/app/actions";
 
 export default async function AppLayout({
   children,
@@ -59,11 +60,24 @@ export default async function AppLayout({
             <Link href="/app" className="hover:text-ink">
               Моё
             </Link>
+            <Link href="/app/profile" className="hover:text-ink">
+              Профиль
+            </Link>
           </nav>
 
-          <span className="text-sm text-ink-faint">
-            {profile?.name || user.email}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className="hidden text-sm text-ink-faint sm:inline">
+              {profile?.name || user.email}
+            </span>
+            <form action={signOut}>
+              <button
+                type="submit"
+                className="text-sm font-medium text-ink-soft transition hover:text-ink"
+              >
+                Выйти
+              </button>
+            </form>
+          </div>
         </div>
       </header>
 

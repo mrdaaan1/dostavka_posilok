@@ -194,6 +194,13 @@ export default function RegisterFlow() {
               >
                 {isSubmitting ? "Регистрируем…" : "Зарегистрироваться"}
               </button>
+
+              <p className="text-center text-sm text-ink-soft">
+                Уже есть аккаунт?{" "}
+                <Link href="/login" className="font-medium text-ink underline">
+                  Войти
+                </Link>
+              </p>
             </motion.form>
           )}
 

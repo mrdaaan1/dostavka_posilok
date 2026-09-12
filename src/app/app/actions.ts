@@ -15,6 +15,32 @@ function toStringOrNull(value: FormDataEntryValue | null) {
   return str ? str : null;
 }
 
+export async function signOut() {
+  const supabase = await createClient();
+  await supabase.auth.signOut();
+  redirect("/");
+}
+
+export async function updateProfile(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/");
+
+  await supabase
+    .from("profiles")
+    .update({
+      name: toStringOrNull(formData.get("name")),
+      bio: toStringOrNull(formData.get("bio")),
+      contact: toStringOrNull(formData.get("contact")),
+    })
+    .eq("id", user.id);
+
+  revalidatePath("/app");
+  revalidatePath("/app/profile");
+}
+
 export async function createRequest(formData: FormData) {
   const supabase = await createClient();
   const {
@@ -166,6 +192,75 @@ export async function confirmMatch(formData: FormData) {
       .update({ status: "matched" })
       .eq("id", match.trip_id);
   }
+
+  revalidatePath("/app");
+}
+
+export async function declineMatch(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/");
+
+  const matchId = String(formData.get("match_id") || "");
+  if (!matchId) return;
+
+  const { data: match } = await supabase
+    .from("matches")
+    .select("id, request_id, trip_id")
+    .eq("id", matchId)
+    .single();
+  if (!match) return;
+
+  const [{ data: requestRow }, { data: tripRow }] = await Promise.all([
+    supabase.from("requests").select("sender_id").eq("id", match.request_id).single(),
+    supabase.from("trips").select("carrier_id").eq("id", match.trip_id).single(),
+  ]);
+
+  const isParticipant =
+    requestRow?.sender_id === user.id || tripRow?.carrier_id === user.id;
+  if (!isParticipant) return;
+
+  await supabase.from("matches").update({ status: "cancelled" }).eq("id", matchId);
+
+  revalidatePath("/app");
+}
+
+export async function cancelRequest(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/");
+
+  const requestId = String(formData.get("request_id") || "");
+  if (!requestId) return;
+
+  await supabase
+    .from("requests")
+    .update({ status: "cancelled" })
+    .eq("id", requestId)
+    .eq("sender_id", user.id);
+
+  revalidatePath("/app");
+}
+
+export async function cancelTrip(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) redirect("/");
+
+  const tripId = String(formData.get("trip_id") || "");
+  if (!tripId) return;
+
+  await supabase
+    .from("trips")
+    .update({ status: "cancelled" })
+    .eq("id", tripId)
+    .eq("carrier_id", user.id);
 
   revalidatePath("/app");
 }

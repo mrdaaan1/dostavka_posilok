@@ -34,7 +34,7 @@ export default function Header() {
 
           <div className="flex items-center gap-3">
             <Link
-              href="/register"
+              href="/login"
               className="hidden text-sm font-medium text-ink-soft transition hover:text-ink sm:inline"
             >
               Войти

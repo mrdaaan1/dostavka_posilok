@@ -1,6 +1,11 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import { confirmMatch } from "@/app/app/actions";
+import {
+  confirmMatch,
+  declineMatch,
+  cancelRequest,
+  cancelTrip,
+} from "@/app/app/actions";
 import RevealContactButton from "@/components/app/RevealContactButton";
 
 const statusLabels: Record<string, string> = {
@@ -54,10 +59,12 @@ export default async function DashboardPage() {
             .from("matches")
             .select("id, trip_id, request_id, status, confirmed_by_sender, confirmed_by_carrier")
             .in("request_id", myItemIds)
+            .neq("status", "cancelled")
         : await supabase
             .from("matches")
             .select("id, trip_id, request_id, status, confirmed_by_sender, confirmed_by_carrier")
-            .in("trip_id", myItemIds);
+            .in("trip_id", myItemIds)
+            .neq("status", "cancelled");
 
   const matchDetails = await Promise.all(
     (matches ?? []).map(async (match) => {
@@ -114,9 +121,26 @@ export default async function DashboardPage() {
               <span className="font-medium text-ink">
                 {item.from_city} → {item.to_city}
               </span>
-              <span className="text-sm text-ink-faint">
-                {statusLabels[item.status] ?? item.status}
-              </span>
+              <div className="flex items-center gap-3">
+                <span className="text-sm text-ink-faint">
+                  {statusLabels[item.status] ?? item.status}
+                </span>
+                {item.status === "open" && (
+                  <form action={role === "sender" ? cancelRequest : cancelTrip}>
+                    <input
+                      type="hidden"
+                      name={role === "sender" ? "request_id" : "trip_id"}
+                      value={item.id}
+                    />
+                    <button
+                      type="submit"
+                      className="text-sm text-ink-faint underline transition hover:text-pink-dark"
+                    >
+                      Отменить
+                    </button>
+                  </form>
+                )}
+              </div>
             </div>
           ))}
         </div>
@@ -161,15 +185,26 @@ export default async function DashboardPage() {
                       Ждём подтверждения от контрагента
                     </p>
                   ) : (
-                    <form action={confirmMatch}>
-                      <input type="hidden" name="match_id" value={match.id} />
-                      <button
-                        type="submit"
-                        className="rounded-xl bg-gradient-brand px-4 py-2 text-sm font-semibold text-ink transition hover:brightness-105"
-                      >
-                        Подтвердить сделку
-                      </button>
-                    </form>
+                    <div className="flex items-center gap-3">
+                      <form action={confirmMatch}>
+                        <input type="hidden" name="match_id" value={match.id} />
+                        <button
+                          type="submit"
+                          className="rounded-xl bg-gradient-brand px-4 py-2 text-sm font-semibold text-ink transition hover:brightness-105"
+                        >
+                          Подтвердить сделку
+                        </button>
+                      </form>
+                      <form action={declineMatch}>
+                        <input type="hidden" name="match_id" value={match.id} />
+                        <button
+                          type="submit"
+                          className="text-sm text-ink-faint underline transition hover:text-pink-dark"
+                        >
+                          Отклонить
+                        </button>
+                      </form>
+                    </div>
                   )}
                 </div>
               </div>

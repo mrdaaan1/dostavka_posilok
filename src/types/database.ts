@@ -155,6 +155,10 @@ export interface Database {
         Args: { p_match_id: string };
         Returns: string | null;
       };
+      get_own_contact: {
+        Args: Record<PropertyKey, never>;
+        Returns: string | null;
+      };
     };
     Enums: {
       user_role: UserRole;
